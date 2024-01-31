@@ -58,6 +58,7 @@ fun SetupNavigation(navController: NavHostController) {
         }
         }
     }
+
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(

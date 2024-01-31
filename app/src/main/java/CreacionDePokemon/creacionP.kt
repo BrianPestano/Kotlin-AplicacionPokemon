@@ -1,5 +1,7 @@
 package CreacionDePokemon
 
+import InfoArray.infoArray
+import PantallaPrincipal.lista
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +18,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.prctica3aplicacindepokmon.R
 import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +28,7 @@ fun pantallaCreacionPokemon(navController: NavHostController) {
     var nivel by remember { mutableStateOf(1) }
     val regiones = listOf("Kanto", "Johto", "Hoenn", "Sinnoh", "Teselia", "Kalos", "Alola")
     var buscador by remember { mutableStateOf("") }
-    var seleccionRegion by remember { mutableStateOf<String?>(null) }
+    var seleccionRegion by remember { mutableStateOf<String>("") }
     var menuDesplegado by remember { mutableStateOf(false) }
     val tipos = listOf("Eléctrico", "Fantasma", "Hada", "Tierra")
     val scrollState = rememberScrollState()
@@ -33,7 +36,7 @@ fun pantallaCreacionPokemon(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
+            //.verticalScroll(scrollState)
             .padding(16.dp)
     ) {
         // Cuadro de texto para el nombre
@@ -55,13 +58,10 @@ fun pantallaCreacionPokemon(navController: NavHostController) {
                 buscador = it
                 // Cerrar el menú desplegable si la búsqueda está vacía
                 if (it.isEmpty()) {
-                    seleccionRegion = null
+                    seleccionRegion = ""
                 }
             },
             onSearch = {
-                if (seleccionRegion == null) {
-                    menuDesplegado = false
-                }
             },
             active = menuDesplegado,
             onActiveChange = { menuDesplegado = it }
@@ -127,9 +127,12 @@ fun pantallaCreacionPokemon(navController: NavHostController) {
         ) {
             IconButton(onClick = {
                 // Navegar hacia atrás
+                lista.add(infoArray(nombre, imagenes = R.drawable.bulbasaur
+                    , ruta = ""
+                    , seleccionRegion, nivel))
                 navController.popBackStack()
             }) {
-                Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back")
+                Icon(imageVector = Icons.Outlined.Check, contentDescription = "Back")
             }
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -138,7 +141,7 @@ fun pantallaCreacionPokemon(navController: NavHostController) {
                 // Guardar el Pokémon y navegar hacia atrás
                 navController.navigate("pantallaDetalles/$nombre")
             }) {
-                Icon(imageVector = Icons.Outlined.Check, contentDescription = "Save")
+                Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Save")
             }
         }
     }
